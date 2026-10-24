@@ -1,0 +1,32 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# env files
+.env
+.env.local
+.env.*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# dữ liệu tin tức đã lưu — có thể chọn commit hoặc không tuỳ bạn
+# nếu deploy lên Vercel thì file lưu tại đây sẽ KHÔNG tồn tại lâu dài
+# (xem README.md phần "Lưu trữ trên Vercel")
+
+.vercel
+.env*
