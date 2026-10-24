@@ -1,5 +1,4 @@
 vnstock3==3.2.1
-streamlit>=1.35
 reportlab>=4.2
 matplotlib>=3.8
 pandas>=2.1
@@ -12,6 +11,5 @@ plotly>=5.18
 yfinance>=0.2.40
 seaborn>=0.13
 urllib3>=2.0
-
 beautifulsoup4
-googlenewsdecoder
+openpyxl
