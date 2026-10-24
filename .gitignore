@@ -1,32 +1,23 @@
-# dependencies
-/node_modules
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-# next.js
-/.next/
-/out/
+# Output reports & temporary charts
+reports/output/*.pdf
+reports/output/*.html
+reports/output/*.csv
+charts/*.png
 
-# production
-/build
+# Executables
+cloudflared.exe
+*.exe
 
-# misc
-.DS_Store
-*.pem
-
-# env files
+# Environments
+.venv/
+venv/
+env/
 .env
-.env.local
-.env.*.local
 
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# dữ liệu tin tức đã lưu — có thể chọn commit hoặc không tuỳ bạn
-# nếu deploy lên Vercel thì file lưu tại đây sẽ KHÔNG tồn tại lâu dài
-# (xem README.md phần "Lưu trữ trên Vercel")
-
-.vercel
-.env*
+# Streamlit local state
+.streamlit/secrets.toml
