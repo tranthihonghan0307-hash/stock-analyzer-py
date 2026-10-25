@@ -36,6 +36,8 @@ BASE_DIR       = os.path.dirname(os.path.abspath(__file__))
 CHART_OUT_DIR  = os.path.join(BASE_DIR, "charts", "output")
 REPORT_OUT_DIR = os.path.join(BASE_DIR, "reports", "output")
 FONT_DIR       = os.path.join(BASE_DIR, "utils", "fonts")
+if not os.path.exists(os.path.join(FONT_DIR, "DejaVuSans.ttf")) and os.path.exists(os.path.join(BASE_DIR, "DejaVuSans.ttf")):
+    FONT_DIR = BASE_DIR
 
 for d in [CHART_OUT_DIR, REPORT_OUT_DIR]:
     os.makedirs(d, exist_ok=True)

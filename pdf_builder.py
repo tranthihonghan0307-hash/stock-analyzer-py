@@ -19,16 +19,27 @@ from reportlab.pdfbase.ttfonts import TTFont
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import (RGB_POSITIVE, RGB_NEGATIVE, RGB_NEUTRAL, RGB_HEADER,
                     RGB_ROW_ALT, COLOR_POSITIVE, COLOR_NEGATIVE,
-                    CHART_OUT_DIR, REPORT_OUT_DIR, FONT_DIR)
-from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
-from analysis.commentary_engine import (
-    generate_executive_summary,
-    generate_technical_commentary,
-    generate_company_profile,
-    generate_peer_conclusion,
-    generate_four_key_risks,
-    generate_three_investment_strategies
-)
+                    CHART_OUT_DIR, REPORT_OUT_DIR, FONT_DIR, BASE_DIR)
+try:
+    from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from analysis.commentary_engine import (
+        generate_executive_summary,
+        generate_technical_commentary,
+        generate_company_profile,
+        generate_peer_conclusion,
+        generate_four_key_risks,
+        generate_three_investment_strategies
+    )
+except ModuleNotFoundError:
+    from formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from commentary_engine import (
+        generate_executive_summary,
+        generate_technical_commentary,
+        generate_company_profile,
+        generate_peer_conclusion,
+        generate_four_key_risks,
+        generate_three_investment_strategies
+    )
 
 # ── Màu ReportLab ─────────────────────────────────────────────────
 C_POS    = colors.HexColor(COLOR_POSITIVE)
@@ -42,15 +53,20 @@ C_BLACK  = colors.HexColor("#1F2937")
 # ── Đăng ký font ─────────────────────────────────────────────────
 def _register_fonts():
     """Đăng ký DejaVu Sans nếu có, fallback về Helvetica"""
-    font_regular = os.path.join(FONT_DIR, "DejaVuSans.ttf")
-    font_bold    = os.path.join(FONT_DIR, "DejaVuSans-Bold.ttf")
-    if os.path.exists(font_regular) and os.path.exists(font_bold):
-        try:
-            pdfmetrics.registerFont(TTFont("DejaVuSans",      font_regular))
-            pdfmetrics.registerFont(TTFont("DejaVuSans-Bold", font_bold))
-            return "DejaVuSans", "DejaVuSans-Bold"
-        except:
-            pass
+    candidates = [
+        (os.path.join(FONT_DIR, "DejaVuSans.ttf"), os.path.join(FONT_DIR, "DejaVuSans-Bold.ttf")),
+        (os.path.join(BASE_DIR, "DejaVuSans.ttf"), os.path.join(BASE_DIR, "DejaVuSans-Bold.ttf")),
+        (os.path.join(os.path.dirname(os.path.abspath(__file__)), "DejaVuSans.ttf"),
+         os.path.join(os.path.dirname(os.path.abspath(__file__)), "DejaVuSans-Bold.ttf")),
+    ]
+    for font_regular, font_bold in candidates:
+        if os.path.exists(font_regular) and os.path.exists(font_bold):
+            try:
+                pdfmetrics.registerFont(TTFont("DejaVuSans",      font_regular))
+                pdfmetrics.registerFont(TTFont("DejaVuSans-Bold", font_bold))
+                return "DejaVuSans", "DejaVuSans-Bold"
+            except Exception:
+                pass
     return "Helvetica", "Helvetica-Bold"
 
 FONT_NORMAL, FONT_BOLD = _register_fonts()

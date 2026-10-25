@@ -5,12 +5,20 @@ import json
 import pandas as pd
 from html import escape
 from config import REPORT_OUT_DIR
-from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
-from analysis.commentary_engine import (
-    generate_executive_summary, generate_technical_commentary,
-    generate_company_profile, generate_peer_conclusion,
-    generate_four_key_risks, generate_three_investment_strategies
-)
+try:
+    from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from analysis.commentary_engine import (
+        generate_executive_summary, generate_technical_commentary,
+        generate_company_profile, generate_peer_conclusion,
+        generate_four_key_risks, generate_three_investment_strategies
+    )
+except ModuleNotFoundError:
+    from formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from commentary_engine import (
+        generate_executive_summary, generate_technical_commentary,
+        generate_company_profile, generate_peer_conclusion,
+        generate_four_key_risks, generate_three_investment_strategies
+    )
 
 def build_html(symbol: str, data: dict, data_date_str: str = "") -> str:
     """

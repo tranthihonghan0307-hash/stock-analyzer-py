@@ -9,23 +9,58 @@ warnings.filterwarnings("ignore")
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config import START_DATE, CHART_OUT_DIR, REPORT_OUT_DIR
-from data.fetcher import (
-    fetch_price_history, fetch_company_info, fetch_financial_statements,
-    fetch_current_price, fetch_industry_peers, calc_avg_volume
-)
-from data.news_fetcher import fetch_news
-from data.ctck_fetcher import get_ctck_consensus
-from analysis.technical import add_all_indicators, get_support_resistance, get_technical_summary
-from analysis.fundamental import extract_income_data, extract_all_ratios, extract_cashflow, compute_scoring, compute_pe_peg
-from charts.chart_generator import (
-    chart1_price_line, chart2_candle_ma_volume, chart3_rsi, chart4_macd,
-    chart5_news_pie, chart6_financials, chart7_roe_roa, chart8_target_prices,
-    chart9_peer_valuation, chart10_performance, chart11_radar
-)
-from reports.pdf_builder import build_pdf
-from reports.html_builder import build_html
-from reports.csv_builder import build_csv
-from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+try:
+    from data.fetcher import (
+        fetch_price_history, fetch_company_info, fetch_financial_statements,
+        fetch_current_price, fetch_industry_peers, calc_avg_volume
+    )
+    from data.news_fetcher import fetch_news
+    from data.ctck_fetcher import get_ctck_consensus
+    from analysis.technical import add_all_indicators, get_support_resistance, get_technical_summary
+    from analysis.fundamental import extract_income_data, extract_all_ratios, extract_cashflow, compute_scoring, compute_pe_peg
+    from charts.chart_generator import (
+        chart1_price_line, chart2_candle_ma_volume, chart3_rsi, chart4_macd,
+        chart5_news_pie, chart6_financials, chart7_roe_roa, chart8_target_prices,
+        chart9_peer_valuation, chart10_performance, chart11_radar
+    )
+    from reports.pdf_builder import build_pdf
+    from reports.html_builder import build_html
+    from reports.csv_builder import build_csv
+    from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from analysis.commentary_engine import (
+        generate_executive_summary,
+        generate_technical_commentary,
+        generate_company_profile,
+        generate_peer_conclusion,
+        generate_four_key_risks,
+        generate_three_investment_strategies
+    )
+except ModuleNotFoundError:
+    from fetcher import (
+        fetch_price_history, fetch_company_info, fetch_financial_statements,
+        fetch_current_price, fetch_industry_peers, calc_avg_volume
+    )
+    from news_fetcher import fetch_news
+    from ctck_fetcher import get_ctck_consensus
+    from technical import add_all_indicators, get_support_resistance, get_technical_summary
+    from fundamental import extract_income_data, extract_all_ratios, extract_cashflow, compute_scoring, compute_pe_peg
+    from chart_generator import (
+        chart1_price_line, chart2_candle_ma_volume, chart3_rsi, chart4_macd,
+        chart5_news_pie, chart6_financials, chart7_roe_roa, chart8_target_prices,
+        chart9_peer_valuation, chart10_performance, chart11_radar
+    )
+    from pdf_builder import build_pdf
+    from html_builder import build_html
+    from csv_builder import build_csv
+    from formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+    from commentary_engine import (
+        generate_executive_summary,
+        generate_technical_commentary,
+        generate_company_profile,
+        generate_peer_conclusion,
+        generate_four_key_risks,
+        generate_three_investment_strategies
+    )
 
 def safe_float(v, default=0.0):
     if v is None:
@@ -34,14 +69,6 @@ def safe_float(v, default=0.0):
         return float(str(v).replace("%", "").replace(",", "").strip())
     except (ValueError, TypeError):
         return default
-from analysis.commentary_engine import (
-    generate_executive_summary,
-    generate_technical_commentary,
-    generate_company_profile,
-    generate_peer_conclusion,
-    generate_four_key_risks,
-    generate_three_investment_strategies
-)
 
 # ── Cấu hình trang ───────────────────────────────────────────────
 st.set_page_config(
@@ -321,9 +348,12 @@ def run_single_stock_analysis(sym: str, data_date_str: str, progress_fn=None) ->
     if export_pdf:
         try:
             import importlib
-            import reports.pdf_builder
-            importlib.reload(reports.pdf_builder)
-            pdf_path = reports.pdf_builder.build_pdf(sym, all_data)
+            try:
+                import reports.pdf_builder as _pdf_mod
+            except ModuleNotFoundError:
+                import pdf_builder as _pdf_mod
+            importlib.reload(_pdf_mod)
+            pdf_path = _pdf_mod.build_pdf(sym, all_data)
         except Exception as e: print(f"Lỗi PDF: {e}")
     if export_html:
         try: html_path = build_html(sym, all_data, data_date_str)

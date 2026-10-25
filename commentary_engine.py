@@ -2,7 +2,10 @@
 
 import pandas as pd
 import numpy as np
-from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+try:
+    from utils.formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
+except ModuleNotFoundError:
+    from formatters import fmt_price, fmt_pct, fmt_billion, fmt_number
 
 def generate_executive_summary(symbol: str, data: dict, data_date_str: str) -> str:
     """Tạo đoạn văn tóm tắt điều hành sắc bén (Executive Summary) 3-5 dòng chuẩn Mục 1"""
