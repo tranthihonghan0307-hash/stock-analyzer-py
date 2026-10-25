@@ -165,17 +165,18 @@ with st.sidebar:
     st.caption("AI Chuyên viên Phân tích Đầu tư Cấp cao — Chuẩn v3.0")
     st.divider()
 
-    symbol_input = st.text_input(
-        "Nhập mã cổ phiếu (Tối đa 5 mã)",
-        value="MWG",
-        placeholder="VD: FPT hoặc FPT, MWG, VCB hoặc HPG SSI...",
-        help="Nhập 1 hoặc nhiều mã cách nhau bằng dấu phẩy, dấu cách hoặc xuống dòng"
-    )
+    with st.form("stock_input_form"):
+        symbol_input = st.text_input(
+            "Nhập mã cổ phiếu (Tối đa 5 mã)",
+            value="MWG",
+            placeholder="VD: FPT hoặc FPT, MWG, VCB hoặc HPG SSI...",
+            help="Nhập 1 hoặc nhiều mã cách nhau bằng dấu phẩy, dấu cách hoặc xuống dòng"
+        )
 
-    st.caption(f"📅 **NGÀY DỮ LIỆU:** `{data_date_str}`")
-    st.caption(f"📈 Khung thời gian giá: **01/03/2026 → {data_date_str}**")
+        st.caption(f"📅 **NGÀY DỮ LIỆU:** `{data_date_str}`")
+        st.caption(f"📈 Khung thời gian giá: **01/03/2026 → {data_date_str}**")
 
-    analyze_btn = st.button("🚀 Phân tích ngay", type="primary", use_container_width=True)
+        analyze_btn = st.form_submit_button("🚀 Phân tích ngay", type="primary", use_container_width=True)
     st.divider()
 
     st.markdown("**Tùy chọn kết xuất**")
